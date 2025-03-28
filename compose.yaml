@@ -12,35 +12,51 @@ services:
       - db_data:/var/lib/mysql
 
   wordpress:
-    image: wordpress:latest
+    image: wordpress:php8.3-fpm
     restart: always
     depends_on:
       - db
-    ports:
-      - "8000:80"
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www/html/
+      - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf
+
+  server:
+    image: nginx:latest
+    restart: always
+    depends_on:
+      - wordpress
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf
+      - ./:/var/www/html/
 
   composer:
     image: composer:latest
     working_dir: /app
+    network_mode: "host"
     volumes:
       - ./:/app
 
-  cli:
-    image: wpcli/wp-cli:latest
+  wp:
+    image: wordpress:cli
     depends_on:
       - wordpress
       - db
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
     entrypoint: ["wp"]
-    
+
 volumes:
   db_data:
