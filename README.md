@@ -7,9 +7,14 @@ Setting up services
 docker compose up -d server
 ```
 
-Install composer packages
+Install glotpress packages
 ```
-docker compose run --rm -u $(id -u):$(id -g) composer install --ignore-platform-reqs
+docker compose run --rm -u $(id -u):$(id -g) composer-glotpress install --ignore-platform-reqs
+```
+
+Install example project packages
+```
+docker compose run --rm -u $(id -u):$(id -g) composer-project install --ignore-platform-reqs
 ```
 
 Access http://localhost/glotpress/projects/ with login and password admin admin.

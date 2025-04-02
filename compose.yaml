@@ -1,62 +1,94 @@
 services:
-  db:
-    image: mariadb:latest
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: wordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+  db-glotpress:
+    extends:
+      file: common-services.yaml
+      service: db
     volumes:
       - ./db-init:/docker-entrypoint-initdb.d
-      - db_data:/var/lib/mysql
+      - db-glotpress:/var/lib/mysql
 
-  wordpress:
-    image: wordpress:php8.3-fpm
-    restart: always
-    depends_on:
-      - db
-    environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-      WORDPRESS_DB_NAME: wordpress
+  db-project:
+    extends:
+      file: common-services.yaml
+      service: db
     volumes:
-      - ./:/var/www/html/
-      - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf
-
-  server:
-    image: nginx:latest
-    restart: always
+      - ./db-init:/docker-entrypoint-initdb.d
+      - db-glotpress:/var/lib/mysql
+      
+  wordpress-glotpress:
+    extends:
+      file: common-services.yaml
+      service: wordpress-base
+    environment:
+      WORDPRESS_DB_HOST: db-glotpress:3306
     depends_on:
-      - wordpress
+      - db-glotpress
+    volumes:
+      - ./glotpress/wordpress:/var/www/html
+
+  wordpress-project:
+    extends:
+      file: common-services.yaml
+      service: wordpress-base
+    environment:
+      WORDPRESS_DB_HOST: db-project:3306
+    depends_on:
+      - db-project
+    volumes:
+      - ./project/wordpress:/var/www/html
+
+  server-glotpress:
+    extends:
+      file: common-services.yaml
+      service: server-base
     ports:
       - "80:80"
     volumes:
-      - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf
-      - ./:/var/www/html/
+      - ./glotpress:/var/www/html
 
-  composer:
-    image: composer:latest
-    working_dir: /app
-    network_mode: "host"
+  server-project:
+    extends:
+      file: common-services.yaml
+      service: server-base
+    ports:
+      - "8080:80"
     volumes:
-      - ./:/app
+      - ./project:/var/www/html
 
-  wp:
-    image: wordpress:cli
+  wp-glotpress:
+    extends:
+      file: common-services.yaml
+      service: wp
     depends_on:
-      - wordpress
-      - db
-    environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-      WORDPRESS_DB_NAME: wordpress
-    working_dir: /var/www/html
+      - wordpress-glotpress
+      - db-glotpress
     volumes:
-      - ./:/var/www/html
-    entrypoint: ["wp"]
+      - ./glotpress:/var/www/html
+
+  wp-project:
+    extends:
+      file: common-services.yaml
+      service: wp
+    depends_on:
+      - wordpress-project
+      - db-project
+    volumes:
+      - ./project:/var/www/html
+
+  composer-glotpress:
+    extends:
+      file: common-services.yaml
+      service: composer
+    volumes:
+      - ./glotpress:/app
+
+  composer-project:
+    extends:
+      file: common-services.yaml
+      service: composer
+    volumes:
+      - ./project:/app
 
 volumes:
-  db_data:
+  db-glotpress:
+  db-project:

@@ -1,7 +1,0 @@
-default:
-  suites:
-    default:
-      contexts:
-      - Required\Traduttore\Tests\Behat\FeatureContext
-      paths:
-      - tests/features

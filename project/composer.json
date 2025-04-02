@@ -1,0 +1,32 @@
+{
+    "name": "mateusrovedaa/poc-glotpress",
+    "type": "project",
+    "require": {
+        "johnpbloch/wordpress": "^6.3",
+        "inpsyde/wp-translation-downloader": "2.5"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        }
+    ],
+    "extra": {
+        "installer-paths": {
+            "wordpress/wp-content/plugins/{$name}/": [
+                "type:wordpress-plugin"
+            ],
+            "wordpress/wp-content/themes/{$name}/": [
+                "type:wordpress-theme"
+            ]
+        }
+    },
+    "config": {
+        "secure-http":false,
+        "allow-plugins": {
+            "composer/installers": true,
+            "inpsyde/wp-translation-downloader": true,
+            "johnpbloch/wordpress-core-installer": true
+        }
+    }
+}

@@ -1,2 +1,7 @@
 vendor
-wp-content/uploads
+glotpress/*
+!glotpress/composer.*
+!glotpress/db-init
+project/*
+!project/composer.*
+!project/db-init
