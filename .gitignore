@@ -2,6 +2,8 @@ vendor
 glotpress/*
 !glotpress/composer.*
 !glotpress/db-init
+!glotpress/nginx-config
 project/*
 !project/composer.*
 !project/db-init
+!project/nginx-config

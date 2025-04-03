@@ -4,7 +4,7 @@ services:
       file: common-services.yaml
       service: db
     volumes:
-      - ./db-init:/docker-entrypoint-initdb.d
+      - ./glotpress/db-init:/docker-entrypoint-initdb.d
       - db-glotpress:/var/lib/mysql
 
   db-project:
@@ -12,8 +12,8 @@ services:
       file: common-services.yaml
       service: db
     volumes:
-      - ./db-init:/docker-entrypoint-initdb.d
-      - db-glotpress:/var/lib/mysql
+      - ./project/db-init:/docker-entrypoint-initdb.d
+      - db-project:/var/lib/mysql
       
   wordpress-glotpress:
     extends:
@@ -41,39 +41,49 @@ services:
     extends:
       file: common-services.yaml
       service: server-base
+    depends_on:
+      - wordpress-glotpress
     ports:
       - "80:80"
     volumes:
-      - ./glotpress:/var/www/html
+      - ./glotpress/wordpress:/var/www/html
+      - ./glotpress/nginx-config/nginx.conf:/etc/nginx/nginx.conf
 
   server-project:
     extends:
       file: common-services.yaml
       service: server-base
+    depends_on:
+      - wordpress-project
     ports:
       - "8080:80"
     volumes:
-      - ./project:/var/www/html
+      - ./project/wordpress:/var/www/html
+      - ./project/nginx-config/nginx.conf:/etc/nginx/nginx.conf
 
   wp-glotpress:
     extends:
       file: common-services.yaml
       service: wp
+    environment:
+      WORDPRESS_DB_HOST: db-glotpress:3306
     depends_on:
       - wordpress-glotpress
       - db-glotpress
     volumes:
-      - ./glotpress:/var/www/html
+      - ./glotpress/wordpress:/var/www/html
 
   wp-project:
     extends:
       file: common-services.yaml
       service: wp
+    environment:
+      WORDPRESS_DB_HOST: db-project:3306
     depends_on:
       - wordpress-project
       - db-project
     volumes:
-      - ./project:/var/www/html
+      - ./project/wordpress:/var/www/html
 
   composer-glotpress:
     extends:
@@ -81,6 +91,13 @@ services:
       service: composer
     volumes:
       - ./glotpress:/app
+
+  composer-glotpress-traduttore:
+    extends:
+      file: common-services.yaml
+      service: composer
+    volumes:
+      - ./glotpress/wordpress/wp-content/plugins/traduttore:/app
 
   composer-project:
     extends:

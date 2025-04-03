@@ -15,7 +15,6 @@ services:
     image: wordpress:php8.3-fpm
     restart: always
     environment:
-      WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
@@ -25,14 +24,9 @@ services:
     restart: always
     depends_on:
       - wordpress-base
-    volumes:
-      - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf
 
   wp:
     image: wordpress:cli
-    depends_on:
-      - wordpress-base
-      - db
     environment:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
