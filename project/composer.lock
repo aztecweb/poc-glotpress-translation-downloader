@@ -4,8 +4,34 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6631e052b0e44acf9b1c33d319ba2eae",
+    "content-hash": "be068faef0c79e8a2a4edf11c86ace9a",
     "packages": [
+        {
+            "name": "aztecweb/plugin-test-translation",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "wordpress/private/plugins/plugin-test-translation",
+                "reference": "0fdfeca1a43cd79c27ed98f3aa8891bd41a3333b"
+            },
+            "type": "wordpress-plugin",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "aztecweb/project-plugin-test-translation",
+            "version": "1.0.1",
+            "dist": {
+                "type": "path",
+                "url": "wordpress/private/plugins/project-plugin-test-translation",
+                "reference": "b063c2ba85136749515ef341a3834950a1e0e474"
+            },
+            "type": "wordpress-plugin",
+            "transport-options": {
+                "relative": true
+            }
+        },
         {
             "name": "composer/installers",
             "version": "v2.3.0",

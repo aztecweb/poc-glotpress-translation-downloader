@@ -1,0 +1,26 @@
+{
+    "wordpress-core": {
+        "translations": {
+            "pt_BR": {
+                "updated": "2025-02-25 12:07:35",
+                "version": "6.7.2"
+            }
+        }
+    },
+    "project-plugin-test-translation": {
+        "translations": {
+            "pt_BR": {
+                "updated": "2025-04-03T13:19:13+00:00",
+                "version": "1.0"
+            }
+        }
+    },
+    "plugin-test-translation": {
+        "translations": {
+            "pt_BR": {
+                "updated": "2025-04-03T13:19:23+00:00",
+                "version": "1.0"
+            }
+        }
+    }
+}

@@ -1,9 +1,11 @@
 vendor
 glotpress/*
+!glotpress/wordpress/wp-content/traduttore/*
 !glotpress/composer.*
 !glotpress/db-init
 !glotpress/nginx-config
 project/*
+!project/wordpress/private/*
 !project/composer.*
 !project/db-init
 !project/nginx-config
